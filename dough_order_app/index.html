@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey's Dough Order Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Dewey's Dough Order Calculator</h1>
+        <p>-Select the day of the week to calculate the order</p>
+        <p>-Press next step and follow the instructions</p>
+        <p>-Order the amounts shown</p>
+        
+        <select id="daySelect">
+            <option value="Mon">Mon</option>
+            <option value="Tue">Tue</option>
+            <option value="Wed">Wed</option>
+            <option value="Thur">Thur</option>
+            <option value="Fri">Fri</option>
+            <option value="Sat">Sat</option>
+            <option value="Sun">Sun</option>
+        </select>
+        
+        <button id="nextStepBtn">Next Step</button>
+        <button id="updateParsBtn">Update Pars</button>
+        <button id="viewParsBtn">View Current Pars</button>
+        
+        <p id="result">Result will be shown here</p>
+        
+        <table id="parsTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>11</th>
+                    <th>13</th>
+                    <th>17</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Mon</td><td id="mon-11"></td><td id="mon-13"></td><td id="mon-17"></td></tr>
+                <tr><td>Tue</td><td id="tue-11"></td><td id="tue-13"></td><td id="tue-17"></td></tr>
+                <tr><td>Wed</td><td id="wed-11"></td><td id="wed-13"></td><td id="wed-17"></td></tr>
+                <tr><td>Thur</td><td id="thur-11"></td><td id="thur-13"></td><td id="thur-17"></td></tr>
+                <tr><td>Fri</td><td id="fri-11"></td><td id="fri-13"></td><td id="fri-17"></td></tr>
+                <tr><td>Sat</td><td id="sat-11"></td><td id="sat-13"></td><td id="sat-17"></td></tr>
+                <tr><td>Sun</td><td id="sun-11"></td><td id="sun-13"></td><td id="sun-17"></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

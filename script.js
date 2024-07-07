@@ -1,4 +1,4 @@
-const GITHUB_TOKEN = 'your_personal_access_token'; // Store securely
+const GITHUB_TOKEN = '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'; // Store securely
 
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('DOM fully loaded and parsed');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     console.log('Elements:', daySelect, resultLabel, nextStepBtn, updateParsBtn, viewParsBtn, parsTable);
 
     async function fetchCSVFile() {
-        const response = await fetch('https://api.github.com/repos/yourusername/dough_order_app/contents/order.csv', {
+        const response = await fetch('https://api.github.com/repos/skrticshayne/dough_order_app/contents/order.csv', {
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`
             }
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function updateCSVFile(newContent, sha) {
-        await fetch('https://api.github.com/repos/yourusername/dough_order_app/contents/order.csv', {
+        await fetch('https://api.github.com/repos/skrticshayne/dough_order_app/contents/order.csv', {
             method: 'PUT',
             headers: {
                 'Authorization': `token ${GITHUB_TOKEN}`,

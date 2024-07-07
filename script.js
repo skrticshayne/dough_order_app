@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
+const GITHUB_TOKEN = 'your_personal_access_token'; // Store securely
+
+document.addEventListener('DOMContentLoaded', async function () {
     console.log('DOM fully loaded and parsed');
 
     const defaultOrder = {
@@ -11,10 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'Sun': [0, 0, 0],
     };
 
-    // Retrieve stored order from local storage or use default order
-    const storedOrder = localStorage.getItem('doughOrder');
-    const order = storedOrder ? JSON.parse(storedOrder) : defaultOrder;
-
     const daySelect = document.getElementById('daySelect');
     const resultLabel = document.getElementById('result');
     const nextStepBtn = document.getElementById('nextStepBtn');
@@ -23,6 +21,84 @@ document.addEventListener('DOMContentLoaded', function () {
     const parsTable = document.getElementById('parsTable');
 
     console.log('Elements:', daySelect, resultLabel, nextStepBtn, updateParsBtn, viewParsBtn, parsTable);
+
+    async function fetchCSVFile() {
+        const response = await fetch('https://api.github.com/repos/yourusername/dough_order_app/contents/order.csv', {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`
+            }
+        });
+        const data = await response.json();
+        const csvContent = atob(data.content); // Decode base64 content
+        return { content: csvContent, sha: data.sha };
+    }
+
+    async function updateCSVFile(newContent, sha) {
+        await fetch('https://api.github.com/repos/yourusername/dough_order_app/contents/order.csv', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: 'Update order CSV file',
+                content: btoa(newContent), // Encode content to base64
+                sha: sha
+            })
+        });
+    }
+
+    function convertOrderDataToCSV(orderData) {
+        let csvContent = 'Day,11,13,17\n';
+        Object.keys(orderData).forEach(day => {
+            csvContent += `${day},${orderData[day][0]},${orderData[day][1]},${orderData[day][2]}\n`;
+        });
+        return csvContent;
+    }
+
+    function parseCSVToOrderData(csvContent) {
+        const lines = csvContent.split('\n').slice(1); // Skip the header line
+        const orderData = {};
+        lines.forEach(line => {
+            const [day, eleven, thirteen, seventeen] = line.split(',');
+            if (day) {
+                orderData[day] = [parseInt(eleven), parseInt(thirteen), parseInt(seventeen)];
+            }
+        });
+        return orderData;
+    }
+
+    async function loadOrderData() {
+        try {
+            const { content } = await fetchCSVFile();
+            const parsedOrder = parseCSVToOrderData(content);
+            Object.assign(order, parsedOrder);
+            viewPars();
+        } catch (error) {
+            console.error('Error fetching CSV file:', error);
+        }
+    }
+
+    async function updateTable() {
+        console.log('Updating table');
+        const days = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
+        days.forEach(day => {
+            const userInput = prompt(`Enter the number of dough balls for ${day} in the format 11, 13, 17:`);
+            if (userInput) {
+                order[day] = userInput.split(',').map(Number);
+            }
+        });
+
+        try {
+            const csvData = convertOrderDataToCSV(order);
+            const { sha } = await fetchCSVFile();
+            await updateCSVFile(csvData, sha);
+            alert('Table updated successfully');
+            viewPars();
+        } catch (error) {
+            console.error('Error updating CSV file:', error);
+        }
+    }
 
     nextStepBtn.addEventListener('click', () => {
         console.log('Next Step button clicked');
@@ -52,20 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (day === 'Fri') return Friday();
         if (day === 'Sat') return Saturday();
         if (day === 'Sun') return Sunday();
-    }
-
-    function updateTable() {
-        console.log('Updating table');
-        const days = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
-        days.forEach(day => {
-            const userInput = prompt(`Enter the number of dough balls for ${day} in the format 11, 13, 17:`);
-            if (userInput) {
-                order[day] = userInput.split(',').map(Number);
-            }
-        });
-        localStorage.setItem('doughOrder', JSON.stringify(order)); // Store updated order in local storage
-        alert('Table updated successfully');
-        viewPars();
     }
 
     function viewPars() {
@@ -122,7 +184,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function Wednesday() {
         return order['Sat'];
     }
-
     function Thursday() {
         const leftover = getLeftover();
         const pars = order['Sun'];
@@ -130,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const finalThursTotal = thursTotal.map(val => (val < 0 ? 0 : val));
         return finalThursTotal;
     }
-
+    
     function Friday() {
         const leftover = getLeftover();
         const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17:');
@@ -144,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return [0, 0, 0];
     }
-
+    
     function Saturday() {
         const leftover = getLeftover();
         const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17:');
@@ -162,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return [0, 0, 0];
     }
-
+    
     function Sunday() {
         const leftover = getLeftover();
         const nextTwoDay = nextTwoDayPars('Sun');
@@ -170,7 +231,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = finalCalc(sumArray, 'Sun');
         return result;
     }
-
+    
+    // Load order data from GitHub when page loads
+    await loadOrderData();
+    
     // Initial display of pars when page loads
     viewPars();
 });

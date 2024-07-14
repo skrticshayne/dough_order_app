@@ -1,4 +1,4 @@
-const GITHUB_TOKEN = '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'; // Store securely
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('DOM fully loaded and parsed');

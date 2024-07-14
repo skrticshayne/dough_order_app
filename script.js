@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function Friday() {
         const leftover = getLeftover();
-        const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17:');
+        const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17');
         if (yesterday) {
             const yesterdayArray = yesterday.split(',').map(Number);
             const sums = leftover.map((val, idx) => val + yesterdayArray[idx]);
@@ -118,10 +118,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function Saturday() {
         const leftover = getLeftover();
-        const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17:');
+        const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17');
         if (yesterday) {
             const yesterdayArray = yesterday.split(',').map(Number);
-            const twoDaysAgo = prompt('What was ordered 2 days ago? Enter in the format 11, 13, 17:');
+            const twoDaysAgo = prompt('What was ordered 2 days ago? Enter in the format 11, 13, 17');
             if (twoDaysAgo) {
                 const twoDaysAgoArray = twoDaysAgo.split(',').map(Number);
                 const sumArray = leftover.map((val, idx) => val + yesterdayArray[idx] + twoDaysAgoArray[idx]);

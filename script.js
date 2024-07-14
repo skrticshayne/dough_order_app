@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM fully loaded and parsed');
 
     const order = {
-        'Mon': [500, 6, 12],
+        'Mon': [5, 6, 12],
         'Tue': [6, 7, 12],
         'Wed': [6, 8, 13],
         'Thur': [6, 9, 13],

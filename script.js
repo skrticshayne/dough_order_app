@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getLeftover() {
-        const leftover = prompt('What was leftover today? Enter in the format 11, 13, 17:');
+        const leftover = prompt('What was leftover today? Enter in the format 11, 13, 17');
         return leftover ? leftover.split(',').map(Number) : [0, 0, 0];
     }
 
     function Monday() {
         const leftover = getLeftover();
-        const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17:');
+        const yesterday = prompt('What was ordered yesterday? Enter in the format 11, 13, 17');
         if (yesterday) {
             const yesterdayArray = yesterday.split(',').map(Number);
             const sums = leftover.map((val, idx) => val + yesterdayArray[idx]);

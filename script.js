@@ -14,10 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const daySelect = document.getElementById('daySelect');
     const resultLabel = document.getElementById('result');
     const nextStepBtn = document.getElementById('nextStepBtn');
-    const viewParsBtn = document.getElementById('viewParsBtn');
     const parsTable = document.getElementById('parsTable');
 
-    console.log('Elements:', daySelect, resultLabel, nextStepBtn, viewParsBtn, parsTable);
+    console.log('Elements:', daySelect, resultLabel, nextStepBtn, parsTable);
 
     nextStepBtn.addEventListener('click', () => {
         console.log('Next Step button clicked');
@@ -28,10 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
         resultLabel.innerHTML = `Place this order:<br> ${result[0]} trays of 11's<br> ${result[1]} trays of 13's<br> ${result[2]} trays of 17's`;
     });
 
-    viewParsBtn.addEventListener('click', () => {
-        console.log('View Current Pars button clicked');
-        viewPars();
-    });
 
     function calculateOrder(day) {
         console.log('Calculating order for:', day);
